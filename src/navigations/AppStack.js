@@ -5,6 +5,7 @@ import QRGenerator from '../screens/QRGenerator';
 import BottomTab from './BottomTab';
 import QRScannerScreen from '../screens/QRScannerScreen';
 import ProductDetails from '../screens/ProductDetails';
+import OnSplashScreen from '../screens/OnSplashScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const HomeStack = () => {
       <Stack.Screen name="BottomTab" component={BottomTab} options={{ presentation: 'card' }} />
       <Stack.Screen name="QRScanner" component={QRScanner} options={{ presentation: 'transparentModal' }} />
       <Stack.Screen name="QRGenerator" component={QRGenerator} options={{ presentation: 'modal' }} />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ presentation: 'modal' }} />
     </Stack.Navigator>
   )
 }
@@ -24,7 +26,6 @@ const QRScannerStack = () => {
       <Stack.Screen name="QRScannerScreen" component={QRScannerScreen} options={{ presentation: 'card' }} />
       <Stack.Screen name="QRScanner" component={QRScanner} options={{ presentation: 'transparentModal' }} />
       <Stack.Screen name="QRGenerator" component={QRGenerator} options={{ presentation: 'modal' }} />
-      <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ presentation: 'modal' }} />
     </Stack.Navigator>
   )
 }

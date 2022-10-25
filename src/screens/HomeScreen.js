@@ -14,14 +14,14 @@ const HomeScreen = ({ navigation }) => {
           <View className='flex-row space-x-3'>
             <View className='w-12 h-12'>
               <Image
-                source={require('../assets/images/avatar.png')}
+                source={require('../assets/images/avatar1.jpg')}
                 resizeMode='contain'
                 className='w-full h-full rounded-full'
               />
             </View>
             <View>
               <Text className='text-primary text-base font-PoppinsBold'>Welcome!</Text>
-              <Text className='text-primary text-base font-PoppinsMedium'>Ben Ten</Text>
+              <Text className='text-primary text-base font-PoppinsMedium'>Frederick Castaneda Jr.</Text>
             </View>
           </View>
           <BellIcon size={32} color={COLORS.primary} />

@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const CartScreen = () => {
   const [cart, setCart] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [numberOfItems, setNumberOfItems] = useState(1);
+  const [subtotal, setSubtotal] = useState(1);
 
   useEffect(() => {
     getCart();
@@ -14,6 +16,14 @@ const CartScreen = () => {
     const value = await AsyncStorage.getItem('cart');
     if (value !== null) {
       setCart(JSON.parse(value));
+      setNumberOfItems(cart.length);
+
+      let subtotal = 0;
+      cart.map((item) => {
+        subtotal += item.amount 
+      })
+
+      setSubtotal(subtotal)
     } else {
       setCart([])
     }
@@ -38,7 +48,7 @@ const CartScreen = () => {
       <TouchableOpacity onPress={handleRemoveCartStorage}>
         <Text className='font-PoppinsBold text-2xl text-primary pl-5'>Your Virtual Cart</Text>
       </TouchableOpacity>
-      <View className='flex-1 px-5 pt-5'>
+      <View className='px-5 pt-5 mb-8'>
         <FlatList
           data={cart}
           keyExtractor={(_item, index) => index.toString()}
@@ -50,6 +60,10 @@ const CartScreen = () => {
               onRefresh={() => onRefresh()}
             />}
         />
+      </View>
+      <View className='absolute bottom-0 w-full bg-white'>
+        <Text className='text-[#DFDFDF] text-sm font-PoppinsBold'>{numberOfItems} items</Text>
+        <Text className='text-black text-lg font-PoppinsBold'>Subtotal: {subtotal}</Text>
       </View>
     </View>
   )

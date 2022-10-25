@@ -14,14 +14,16 @@ const QRGenerator = () => {
   // }
 
   const initialItemState = {
-    productName: 'ScriptPro',
-    offer: 'Forever Offer',
-    size: '12L',
-    image: 'ferrero',
-    price: 5000.00
+    virtualCartUid: Math.random(1, 200) + 'virtualProduct',
+    productName: 'Iced Coffee',
+    offer: 'Limited Offer',
+    size: '22oz',
+    image: 'fresh-milk',
+    price: 2000.00
   }
   const [item, setItem] = useState(JSON.stringify(initialItemState));
   const [productQRref, setProductQRref] = useState();
+  const [generateQR, setGenerateQR] = useState();
 
   const saveQrToDisk = async () => {
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {
@@ -31,7 +33,7 @@ const QRGenerator = () => {
     if (productQRref) {
       productQRref.toDataURL((data) => {
         let filePath = RNFS.CachesDirectoryPath + `/${item.name}.png`;
-        console.log(filePath);
+        console.log(filePath, data);
         RNFS.writeFile(filePath, data, 'base64')
           .then((success) => {
             return CameraRoll.save(filePath, 'photo')
@@ -55,21 +57,38 @@ const QRGenerator = () => {
     return status === 'granted';
   }
 
+  const handleGenerateQR = async () => {
+    setItem(JSON.stringify({
+      virtualCartUid: Math.random(1, 200) + 'virtualProduct',
+      productName: 'Iced Coffee',
+      offer: 'Limited Offer',
+      size: '22oz',
+      image: 'fresh-milk',
+      price: 2000.00
+    }))
+  }
+
   return (
     <View className='flex-1 bg-white justify-center items-center'>
       <Text className='-top-5 text-black text-lg font-bold'>QR Code</Text>
-      <QRCode
-        value={item}
-        getRef={(ref) => setProductQRref(ref)}
-        size={250}
-        color="black"
-        backgroundColor="white"
-      />
-      <TouchableOpacity
-        onPress={saveQrToDisk}
-        className='items-center mb-8 bg-[#273746] rounded-3xl p-4 absolute bottom-0 w-[90%] justify-center'>
-        <Text className='text-white text-base capitalize'>Save to Gallery</Text>
-      </TouchableOpacity>
+        <QRCode
+          value={item}
+          getRef={(ref) => setProductQRref(ref)}
+          size={250}
+          color="black"
+          backgroundColor="white"
+        />
+        <TouchableOpacity
+          onPress={handleGenerateQR}
+          className='items-center mb-8 bg-[#273746] rounded-3xl p-4 absolute bottom-16 w-[90%] justify-center'>
+          <Text className='text-white text-base capitalize'>Generate QR Code</Text>
+        </TouchableOpacity>
+      
+        <TouchableOpacity
+          onPress={saveQrToDisk}
+          className='items-center mb-8 bg-[#273746] rounded-3xl p-4 absolute bottom-0 w-[90%] justify-center'>
+          <Text className='text-white text-base capitalize'>Save to Gallery</Text>
+        </TouchableOpacity>
     </View>
   )
 }

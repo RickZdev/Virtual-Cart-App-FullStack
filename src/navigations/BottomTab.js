@@ -3,14 +3,16 @@ import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeIcon, ShoppingCartIcon, ClockIcon, QrCodeIcon, UserIcon } from "react-native-heroicons/outline";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import HomeScreen from '../screens/HomeScreen'
-import OrderHistoryScreen from '../screens/OrderHistoryScreen'
 import CartScreen from '../screens/CartScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import COLORS from '../global/COLORS'
 import { QRScannerStack } from './AppStack';
+import GroceryListScreen from '../screens/GroceryListScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,16 +39,20 @@ const BottomTab = () => {
       <Tab.Screen name="HomeScreen" component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <HomeIcon color={color} size={size} fill={ focused ? COLORS.primary : null}/>
+            focused ?
+            <MaterialCommunityIcons name='home-search' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
+            <MaterialCommunityIcons name='home-search-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/> 
           ),
           tabBarItemStyle: { borderTopColor: 2 }
         }}
       />
 
-      <Tab.Screen name="OrderHistoryScreen" component={OrderHistoryScreen}
+      <Tab.Screen name="GroceryListScreen" component={GroceryListScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons name='history' color={color} size={size} fill={ focused ? COLORS.primary : null}/>
+            focused ? 
+            <MaterialCommunityIcons name='clipboard-text' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
+            <MaterialCommunityIcons name='clipboard-text-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/>
           ),
         }}
       />
@@ -64,7 +70,9 @@ const BottomTab = () => {
       <Tab.Screen name="CartScreen" component={CartScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <ShoppingCartIcon color={color} size={size} fill={ focused ? COLORS.primary : null}/>
+            focused ?
+            <Ionicons name='ios-cart' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
+            <Ionicons name='ios-cart-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/>
           ),
         }}
       />
