@@ -1,7 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 
-const WelcomeScreen = ({ navigation }) => {
+const WelcomeScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <View className='flex-1 bg-white '>
       <Text className='text-4xl text-center pt-28 text-primary font-NunitoBold'>WELCOME TO</Text>
@@ -25,5 +28,3 @@ const WelcomeScreen = ({ navigation }) => {
 }
 
 export default WelcomeScreen
-
-const styles = StyleSheet.create({})

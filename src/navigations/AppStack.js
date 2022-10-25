@@ -5,7 +5,6 @@ import QRGenerator from '../screens/QRGenerator';
 import BottomTab from './BottomTab';
 import QRScannerScreen from '../screens/QRScannerScreen';
 import ProductDetails from '../screens/ProductDetails';
-import OnSplashScreen from '../screens/OnSplashScreen';
 
 const Stack = createStackNavigator();
 
