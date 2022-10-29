@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, Dimensions } from 'react-native'
 import CheckBox from '@react-native-community/checkbox';
-import { LockClosedIcon, UserIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
+import { LockClosedIcon, UserIcon } from 'react-native-heroicons/outline'
 
 const SignUp = () => {
   const navigation = useNavigation();

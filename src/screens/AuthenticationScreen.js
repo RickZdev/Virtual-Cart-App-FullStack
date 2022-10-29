@@ -1,5 +1,5 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, ScrollView, Animated, KeyboardAvoidingView } from 'react-native'
 import React, { useRef } from 'react'
+import { View, Text, Image, Dimensions, TouchableOpacity, ScrollView, Animated } from 'react-native'
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
 

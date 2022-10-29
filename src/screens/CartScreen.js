@@ -1,16 +1,21 @@
-import { View, Text, TouchableOpacity, FlatList, Image, ToastAndroid, RefreshControl, } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, Image, ToastAndroid, StyleSheet } from 'react-native'
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+
+import { cartListAction,  } from '../redux/features/cartSlice'
+import COLORS from '../global/COLORS';
 
 const CartScreen = () => {
-  const [cart, setCart] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [numberOfItems, setNumberOfItems] = useState(1);
-  const [subtotal, setSubtotal] = useState(1);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cartListReducer.cartList)
+  const cartTotal = useSelector((state) => state.cartListReducer.cartList.reduce((total, item) => 
+    total += item.amount,
+  0));
 
-  useEffect(() => {
-    getCart();
-  }, [])
+  const [refreshing, setRefreshing] = useState(false);
 
   const getCart = async () => {
     const value = await AsyncStorage.getItem('cart');
@@ -29,18 +34,35 @@ const CartScreen = () => {
     }
   }
 
+  useEffect(() => {
+  }, [cart])
+
   const handleRemoveCartStorage = async () => {
     await AsyncStorage.removeItem('cart');
     ToastAndroid.show('Remove Cart Successfully!', ToastAndroid.LONG);
   }
 
+  const handleRemoveItem = (item) => {
+    dispatch(cartListAction.removeItemToCart(item.virtualCartUid))
+  }
+
   const onRefresh = () => {
     ToastAndroid.show('Refreshing...', ToastAndroid.SHORT);
-    getCart();
+    // getCart();
     setRefreshing(true)
     setTimeout(() => {
       setRefreshing(false)
     }, 200)
+  }
+
+  const hiddenItem = (data) => {
+    return (
+      <View style={styles.rowBack} >
+        <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={() => handleRemoveItem(data.item)}>
+          <FontAwesome5 name="trash" size={28} color={COLORS.white} />
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   return (
@@ -49,21 +71,18 @@ const CartScreen = () => {
         <Text className='font-PoppinsBold text-2xl text-primary pl-5'>Your Virtual Cart</Text>
       </TouchableOpacity>
       <View className='px-5 pt-5 mb-8'>
-        <FlatList
-          data={cart}
-          keyExtractor={(_item, index) => index.toString()}
-          renderItem={({ item }) => <Card data={item} />}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => onRefresh()}
-            />}
-        />
+      <SwipeListView
+        data={cart}
+        keyExtractor={(_item, index) => index.toString()}
+        renderItem={({ item }) => <Card data={item} />}
+        renderHiddenItem={(data) => hiddenItem(data)}
+        rightOpenValue={-75}
+        closeOnRowPress={true}
+      />
       </View>
       <View className='absolute bottom-0 w-full bg-white'>
-        <Text className='text-[#DFDFDF] text-sm font-PoppinsBold'>{numberOfItems} items</Text>
-        <Text className='text-black text-lg font-PoppinsBold'>Subtotal: {subtotal}</Text>
+        <Text className='text-[#DFDFDF] text-sm font-PoppinsBold'>{cart.length} items</Text>
+        <Text className='text-black text-lg font-PoppinsBold'>Subtotal: {cartTotal}</Text>
       </View>
     </View>
   )
@@ -101,5 +120,33 @@ const Card = ({ data }) => {
 
   )
 }
+
+const styles = StyleSheet.create({
+  rowBack: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    margin: 5,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+  backRightBtn: {
+    alignItems: 'flex-end',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+    paddingRight: 23
+  },
+  backRightBtnRight: {
+    backgroundColor: COLORS.primary,
+    right: 0,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+})
 
 export default CartScreen

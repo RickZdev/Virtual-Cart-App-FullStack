@@ -1,8 +1,9 @@
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { CameraIcon } from 'react-native-heroicons/outline'
+
 import CustomTextInput from '../components/CustomTextInput'
 import COLORS from '../global/COLORS'
-import { CameraIcon } from 'react-native-heroicons/outline'
 
 const PersonalInfoScreen = ({ navigation }) => {
   return (
@@ -41,5 +42,3 @@ const PersonalInfoScreen = ({ navigation }) => {
 }
 
 export default PersonalInfoScreen
-
-const styles = StyleSheet.create({})

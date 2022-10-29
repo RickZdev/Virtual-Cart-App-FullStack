@@ -1,14 +1,16 @@
+import React, { useState } from 'react'
 import { View, Text, Image, TouchableOpacity, ToastAndroid } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { MicrophoneIcon, MinusIcon, PauseIcon, PlusIcon, StopIcon } from 'react-native-heroicons/outline';
+import { useDispatch } from 'react-redux';
+import Tts from 'react-native-tts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 
-import Tts from 'react-native-tts';
+import { cartListAction } from '../redux/features/cartSlice'
 import COLORS from '../global/COLORS';
 
 const ProductDetails = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const data = JSON.parse(route.params?.data);
   const [amount, setAmount] = useState(data?.price);
   const [quantity, setQuantity] = useState(1);
@@ -17,6 +19,7 @@ const ProductDetails = ({ route, navigation }) => {
   const imageName = 'fresh-milk';
   const rawImage = require(`../assets/images/${imageName}.png`)
 
+  // quantity
   const handleAddQuantity = () => {
     setAmount(prev => prev += data.price)
     setQuantity(prev => prev += 1)
@@ -29,32 +32,20 @@ const ProductDetails = ({ route, navigation }) => {
     }
   }
 
+  // add to cart
   const handleAddToCart = async () => {
-    try {
-      const value = await AsyncStorage.getItem('cart');
-      let tempArr = [];
-      console.log(value);
-      if (value !== null) {
-        tempArr = [...JSON.parse(value)];
-        tempArr.push({ ...data, quantity, amount })
-        await AsyncStorage.setItem('cart', JSON.stringify(tempArr));
-      } else {
-        tempArr.push({ ...data, quantity, amount })
-        await AsyncStorage.setItem('cart', JSON.stringify(tempArr));
-      }
-      ToastAndroid.show('Added to cart successfully', ToastAndroid.LONG);
-      handleCancel();
-    } catch (error) {
-      console.log('Error cart: ', error);
-    }
+    dispatch(cartListAction.addItemToCart({...data, quantity, amount}))
+    ToastAndroid.show('Added to cart successfully', ToastAndroid.LONG);
+    handleCancel();
   }
 
+  // text-to-speech
   const handleStartSpeech = () => {
     Tts.setDefaultLanguage('en-IE');
     Tts.setDefaultRate(1, true);
     Tts.setDefaultPitch(2.0);
 
-    Tts.addEventListener('tts-finish', event => setStartSpeech(false));
+    Tts.addEventListener('tts-finish', _event => setStartSpeech(false));
 
     if(startSpeech) {
       Tts.stop();
@@ -79,7 +70,6 @@ const ProductDetails = ({ route, navigation }) => {
       });
     }
     setStartSpeech(!startSpeech);
-    console.log(startSpeech)
   }
 
   const handleCancel = () => {

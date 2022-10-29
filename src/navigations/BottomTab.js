@@ -1,22 +1,17 @@
-import React from 'react'
-import { View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeIcon, ShoppingCartIcon, ClockIcon, QrCodeIcon, UserIcon } from "react-native-heroicons/outline";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
+import { MealPlannerStack, QRScannerStack } from './AppStack';
 import HomeScreen from '../screens/HomeScreen'
 import CartScreen from '../screens/CartScreen'
-import ProfileScreen from '../screens/ProfileScreen'
-import COLORS from '../global/COLORS'
-import { QRScannerStack } from './AppStack';
 import GroceryListScreen from '../screens/GroceryListScreen';
+import COLORS from '../global/COLORS'
 
 const Tab = createBottomTabNavigator();
 
-const BottomTab = () => {
+const BottomTab = ({ navigation }) => {
   return (
     <Tab.Navigator
       initialRouteName={HomeScreen}
@@ -40,29 +35,8 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             focused ?
-            <MaterialCommunityIcons name='home-search' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
-            <MaterialCommunityIcons name='home-search-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/> 
-          ),
-          tabBarItemStyle: { borderTopColor: 2 }
-        }}
-      />
-
-      <Tab.Screen name="GroceryListScreen" component={GroceryListScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            focused ? 
-            <MaterialCommunityIcons name='clipboard-text' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
-            <MaterialCommunityIcons name='clipboard-text-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/>
-          ),
-        }}
-      />
-
-      <Tab.Screen name="QRScannerStack" component={QRScannerStack}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View className='bg-primary w-16 h-16 justify-center items-center rounded-full -top-7' style={{ elevation: 10 }}>
-              <MaterialCommunityIcons name='line-scan' color={COLORS.white} size={40} fill={ focused ? COLORS.primary : null}/>
-            </View>
+            <MaterialCommunityIcons name='home-search' color={color} size={size} /> :
+            <MaterialCommunityIcons name='home-search-outline' color={color} size={size} /> 
           ),
         }}
       />
@@ -71,16 +45,42 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             focused ?
-            <Ionicons name='ios-cart' color={color} size={size} fill={ focused ? COLORS.primary : null}/> :
-            <Ionicons name='ios-cart-outline' color={color} size={size} fill={ focused ? COLORS.primary : null}/>
+            <Ionicons name='ios-cart' color={color} size={size} /> :
+            <Ionicons name='ios-cart-outline' color={color} size={size} />
           ),
         }}
       />
 
-      <Tab.Screen name="ProfileScreen" component={ProfileScreen}
+      <Tab.Screen name="QRScannerStack" component={QRScannerStack}
+        options={{
+          tabBarIcon: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('QRScannerScreen')}
+              className='bg-primary w-16 h-16 justify-center items-center rounded-full -top-7' 
+              style={{ elevation: 10 }}
+            >
+              <MaterialCommunityIcons name='line-scan' color={COLORS.white} size={40} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <Tab.Screen name="GroceryListScreen" component={GroceryListScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <UserIcon color={color} size={size} fill={ focused ? COLORS.primary : null}/>
+            focused ? 
+            <MaterialCommunityIcons name='clipboard-text' color={color} size={size} /> :
+            <MaterialCommunityIcons name='clipboard-text-outline' color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen name="MealPlannerStack" component={MealPlannerStack}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            focused ?
+            <Ionicons name='ios-fast-food' color={color} size={size} /> :
+            <Ionicons name='ios-fast-food-outline' color={color} size={size} />
           ),
         }}
       />

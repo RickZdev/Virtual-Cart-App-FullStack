@@ -5,14 +5,6 @@ import CameraRoll from "@react-native-community/cameraroll";
 import QRCode from 'react-native-qrcode-svg';
 
 const QRGenerator = () => {
-  // const initialItemState = {
-  //   productName: 'Nestle Fresh Milk',
-  //   offer: 'Limited Offer',
-  //   size: '1L',
-  //   image: 'fresh-milk',
-  //   price: 150.00
-  // }
-
   const initialItemState = {
     virtualCartUid: Math.random(1, 200) + 'virtualProduct',
     productName: 'Iced Coffee',
@@ -21,9 +13,9 @@ const QRGenerator = () => {
     image: 'fresh-milk',
     price: 2000.00
   }
+  
   const [item, setItem] = useState(JSON.stringify(initialItemState));
   const [productQRref, setProductQRref] = useState();
-  const [generateQR, setGenerateQR] = useState();
 
   const saveQrToDisk = async () => {
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {

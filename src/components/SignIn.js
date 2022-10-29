@@ -1,7 +1,7 @@
-import { View, Text, TextInput, TouchableOpacity, Image, Dimensions } from 'react-native'
 import React from 'react'
-import { LockClosedIcon, UserIcon } from 'react-native-heroicons/outline'
+import { View, Text, TextInput, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { LockClosedIcon, UserIcon } from 'react-native-heroicons/outline'
 
 const SignIn = () => {
   const navigation = useNavigation();

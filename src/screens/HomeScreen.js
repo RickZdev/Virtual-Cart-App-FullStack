@@ -1,9 +1,10 @@
-import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { BellIcon } from 'react-native-heroicons/outline'
-import COLORS from '../global/COLORS'
+
 import SaleSection from '../components/SaleSection'
 import FeaturedSection from '../components/FeaturedSection'
+import COLORS from '../global/COLORS'
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -12,19 +13,21 @@ const HomeScreen = ({ navigation }) => {
         {/* header */}
         <View className='flex-row justify-between items-center pt-5 px-5'>
           <View className='flex-row space-x-3'>
-            <View className='w-12 h-12'>
+            <TouchableOpacity onPress={() => navigation.navigate('QRGenerator')} className='w-12 h-12'>
               <Image
                 source={require('../assets/images/avatar1.jpg')}
                 resizeMode='contain'
                 className='w-full h-full rounded-full'
               />
-            </View>
+            </TouchableOpacity>
             <View>
               <Text className='text-primary text-base font-PoppinsBold'>Welcome!</Text>
               <Text className='text-primary text-base font-PoppinsMedium'>Frederick Castaneda Jr.</Text>
             </View>
           </View>
-          <BellIcon size={32} color={COLORS.primary} />
+          <TouchableOpacity>
+            <BellIcon size={32} color={COLORS.primary} />
+          </TouchableOpacity>
         </View>
         {/* sale section */}
         <SaleSection />

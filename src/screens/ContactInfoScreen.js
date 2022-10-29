@@ -1,13 +1,8 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
-import CustomTextInput from '../components/CustomTextInput';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+
+import CustomTextInput from '../components/CustomTextInput';
 
 const ContactInfoScreen = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
