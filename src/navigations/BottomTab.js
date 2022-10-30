@@ -1,5 +1,6 @@
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -12,6 +13,8 @@ import COLORS from '../global/COLORS'
 const Tab = createBottomTabNavigator();
 
 const BottomTab = ({ navigation }) => {
+  const cart = useSelector((state) => state.cartListReducer.cartList)
+
   return (
     <Tab.Navigator
       initialRouteName={HomeScreen}
@@ -44,9 +47,14 @@ const BottomTab = ({ navigation }) => {
       <Tab.Screen name="CartScreen" component={CartScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            focused ?
-            <Ionicons name='ios-cart' color={color} size={size} /> :
-            <Ionicons name='ios-cart-outline' color={color} size={size} />
+              focused ?
+              <Ionicons name='ios-cart' color={color} size={size} /> :
+              <View>
+                <Ionicons name='ios-cart-outline' color={color} size={size} />
+                <View className='absolute -right-2 -top-2 bg-primary rounded-full w-5 h-5 justify-center items-center'>
+                  <Text className='text-xs text-white font-PoppinsRegular'>{cart.length}</Text>
+                </View>
+              </View>
           ),
         }}
       />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, Image, TouchableOpacity, ToastAndroid } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Tts from 'react-native-tts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
@@ -11,6 +11,8 @@ import COLORS from '../global/COLORS';
 
 const ProductDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cartListReducer.cartList)
+
   const data = JSON.parse(route.params?.data);
   const [amount, setAmount] = useState(data?.price);
   const [quantity, setQuantity] = useState(1);
@@ -34,16 +36,19 @@ const ProductDetails = ({ route, navigation }) => {
 
   // add to cart
   const handleAddToCart = async () => {
-    dispatch(cartListAction.addItemToCart({...data, quantity, amount}))
-    ToastAndroid.show('Added to cart successfully', ToastAndroid.LONG);
-    handleCancel();
+    if(cart.some(item => item.virtualCartUid === data.virtualCartUid)) {
+      ToastAndroid.show('Item already on the cart', ToastAndroid.SHORT);
+    } else {
+      const total = quantity * amount;
+      dispatch(cartListAction.addItemToCart({ ...data, quantity, total}))
+      ToastAndroid.show('Added to cart successfully', ToastAndroid.LONG);
+      handleCancel();
+    }
   }
 
   // text-to-speech
   const handleStartSpeech = () => {
     Tts.setDefaultLanguage('en-IE');
-    Tts.setDefaultRate(1, true);
-    Tts.setDefaultPitch(2.0);
 
     Tts.addEventListener('tts-finish', _event => setStartSpeech(false));
 
@@ -53,11 +58,11 @@ const ProductDetails = ({ route, navigation }) => {
       Tts.getInitStatus().then(() => {
         Tts.speak(
           `
-            Product Details: \n
-            Product Name: ${data.productName}\n
-            Price: ${data.price} Pesos\n
-            Size: ${data.size}\n
-            Offer: ${data.offer}\n
+            Product Details: .\n
+            Product Name: ${data.productName}.\n
+            Price: ${data.price} Pesos.\n
+            Size: ${data.size}.\n
+            Offer: ${data.offer}.\n
           `,
           {
             androidParams: {
@@ -125,7 +130,7 @@ const ProductDetails = ({ route, navigation }) => {
       <View className='flex-1 justify-center'>
         <View className='flex-row justify-center items-end space-x-4'>
           <TouchableOpacity onPress={handleAddToCart} className='bg-white text-primary rounded-3xl w-32 h-12 justify-center items-center'>
-            <Text className='tex-primary font-NunitoBold text-sm'>Add to Cart</Text>
+            <Text className='text-primary font-NunitoBold text-sm'>Add to Cart</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleCancel} className='bg-primary border-[1px] border-white  rounded-3xl w-32 h-12 justify-center items-center'>

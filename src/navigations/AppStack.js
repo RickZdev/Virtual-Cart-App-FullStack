@@ -32,7 +32,7 @@ const MealPlannerStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={MealPlannerScreen}>
       <Stack.Screen name="MealPlannerScreen" component={MealPlannerScreen} options={{ presentation: 'card' }} />
-      <Stack.Screen name="MealDetailsScreen" component={MealDetailsScreen} options={{ ...TransitionPresets.RevealFromBottomAndroid }} />
+      <Stack.Screen name="MealDetailsScreen" component={MealDetailsScreen} options={{ ...TransitionPresets.SlideFromRightIOS }} />
     </Stack.Navigator>
   )
 }

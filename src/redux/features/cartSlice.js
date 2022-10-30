@@ -15,26 +15,29 @@ const cartSlice = createSlice({
     },
     removeItemToCart: (state, action) => {
       const itemId = action.payload;
-      console.log(itemId)
       state.cartList = state.cartList.filter(item => {
         if(item.virtualCartUid !== itemId) {
           return item;
         }
       });
-
-
-      console.log(state.cartList)
     },
-    editGrocery: (state, action) => {
-      const { id, text } = action.payload;
-      const index = state.groceryList.findIndex((item) => item.id === id);
-      const tempArr = [...state.groceryList];
-      tempArr[index].item = text
+    addItemQuantity: (state, action) => {
+      const id = action.payload;
+      const index = state.cartList.findIndex((item) => item.virtualCartUid === id);
+      const tempArr = [...state.cartList];
+      tempArr[index].quantity += 1
 
-      state.groceryList = [...tempArr];
+      tempArr[index].total = tempArr[index].quantity * tempArr[index].price;
+      state.cartList = [...tempArr];
+    },
+    removeItemQuantity: (state, action) => {
+      const id = action.payload;
+      const index = state.cartList.findIndex((item) => item.virtualCartUid === id);
+      const tempArr = [...state.cartList];
+      tempArr[index].quantity -= 1
 
-      console.log(state.groceryList)
-      
+      tempArr[index].total = tempArr[index].quantity * tempArr[index].price;
+      state.cartList = [...tempArr];
     }
   }
 })

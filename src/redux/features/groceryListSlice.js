@@ -29,6 +29,7 @@ const groceryListSlice = createSlice({
       tempArr[index].item = text
 
       state.groceryList = [...tempArr];
+      console.log(state.groceryList)
     }
   }
 })

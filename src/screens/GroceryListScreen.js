@@ -26,7 +26,7 @@ const GroceryListScreen = () => {
         {/* search/add */}
         <View className='flex-row justify-between items-center space-x-3'>
           <TextInput 
-            className='flex-1 border-2 border-[#E6EBF2] rounded-2xl pl-14 pr-2 text-sm font-PoppinsRegular -bottom-[2px] z-50' 
+            className='flex-1 border-2 border-[#E6EBF2] rounded-2xl pl-14 pr-2 text-sm font-PoppinsRegular -bottom-[2px] z-50 text-black' 
             placeholder='Add or Search Item...'
             onChangeText={(text) => setItem({id: Math.random(0, 100), item: text})}
             value={item}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import { MagnifyingGlassIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { getMealCategories } from '../api/mealPlannerApi';
 import MealPlannerSection from '../components/MealPlannerSection';
@@ -20,7 +21,7 @@ const MealPlannerScreen = () => {
         <Text className='text-3xl font-PoppinsBold text-primary text-center'>Meal Planner</Text>
         <View className='flex-row items-center space-x-3'>
           <TextInput 
-            className='flex-1 border-2 border-[#E6EBF2] rounded-2xl pl-14 pr-4 text-sm font-PoppinsRegular -bottom-[2px]' 
+            className='flex-1 border-2 border-[#E6EBF2] rounded-2xl pl-14 pr-4 text-sm font-PoppinsRegular -bottom-[2px] text-black' 
             placeholder='Search your meal plan...'
           />
           <View className='absolute w-full h-full left-2 justify-center'>
@@ -29,7 +30,7 @@ const MealPlannerScreen = () => {
           <TouchableOpacity 
             className='bg-primary p-1 rounded-xl mt-2 justify-center items-center'
           >
-            <PlusIcon size={26} color={COLORS.white} />
+            <AntDesign name='enter' size={26} color={COLORS.white} />
           </TouchableOpacity>
         </View>
       </View>

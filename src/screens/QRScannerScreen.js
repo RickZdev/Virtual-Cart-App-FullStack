@@ -8,7 +8,7 @@ const QRScannerScreen = ({ navigation }) => {
     if(qrData.data.includes('virtualCartUid' || 'virtualCartTagUid')) {
       navigation.navigate('ProductDetails', qrData)
     } else {
-      ToastAndroid.show('Invalid QR Code!', ToastAndroid.LONG);
+      ToastAndroid.show('Invalid QR Code! Please try again!', ToastAndroid.LONG);
     }
   }
 
