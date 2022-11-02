@@ -6,6 +6,10 @@ import QRScannerScreen from '../screens/QRScannerScreen';
 import ProductDetails from '../screens/ProductDetails';
 import MealPlannerScreen from '../screens/MealPlannerScreen';
 import MealDetailsScreen from '../screens/MealDetailsScreen';
+import PaymentOptionScreen from '../screens/PaymentOptionScreen';
+import CartScreen from '../screens/CartScreen';
+import CheckoutScreen from '../screens/CheckoutScreen';
+import CartQrScreen from '../screens/CartQrScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,8 +20,17 @@ const HomeStack = () => {
       <Stack.Screen name="QRScannerScreen" component={QRScannerScreen} options={{ ...TransitionPresets.ModalPresentationIOS }} />
       <Stack.Screen name="QRGenerator" component={QRGenerator} options={{ presentation: 'modal' }} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ ...TransitionPresets.ModalPresentationIOS }} />
+      <Stack.Screen name="PaymentOptionScreen" component={PaymentOptionScreen} options={{ presentation: 'transparentModal' }} />
+      <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} options={{ ...TransitionPresets.SlideFromRightIOS }} />
+      <Stack.Screen name="CartQrScreen" component={CartQrScreen} options={{ ...TransitionPresets.ModalSlideFromBottomIOS }} />
     </Stack.Navigator>
   )
+}
+
+const CartStack = () => {
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={CartScreen}>
+      <Stack.Screen name="CartScreen" component={CartScreen} options={{ presentation: 'modal' }} />
+    </Stack.Navigator>
 }
 
 const QRScannerStack = () => {
@@ -37,4 +50,4 @@ const MealPlannerStack = () => {
   )
 }
 
-export { HomeStack, QRScannerStack, MealPlannerStack };
+export { HomeStack, CartStack, QRScannerStack, MealPlannerStack };

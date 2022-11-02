@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native'
 import Hyperlink from 'react-native-hyperlink'
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
-import { XMarkIcon } from 'react-native-heroicons/outline';
+import { useDispatch } from 'react-redux';
+
+import { PlusIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
+import { groceryListAction } from '../redux/features/groceryListSlice'
 import { getMealDetails } from '../api/mealPlannerApi';
 import DATA from '../global/DATA';
+import COLORS from '../global/COLORS';
 
 const MealDetailsScreen = ({ route, navigation }) => {
   const { height } = Dimensions.get('window');
@@ -110,6 +114,12 @@ const Card = ({ data, index }) => {
 
 const IngredientsSection = ({ data }) => {
   const [ingredients, setIngredients] = useState([]);
+  const dispatch = useDispatch();
+
+  const handleAddItem = async({ id, item}) => {
+    dispatch(groceryListAction.addGrocery({id, item}))
+    ToastAndroid.show('Added to grocery list', ToastAndroid.SHORT);
+  }
 
   useEffect(() => {
     let tempArr = [];
@@ -134,16 +144,19 @@ const IngredientsSection = ({ data }) => {
         ingredients.map((item, index) => (
           <View className='flex-row items-center bg-white py-5 mb-4 px-5 rounded-2xl' style={{ elevation: 4}} key={index}>
             <View className='flex-row flex-1 space-x-5 items-center'>
-              <View className='bg-[#F1F5F5] w-8 h-8 justify-center items-center rounded-lg'>
-                <Text className='text-sm font-PoppinsMedium text-primary'>{item.id}</Text>
-              </View>
-
-              <Text className='text-primary font-PoppinsBold text-base'>{item["strIngredient" + (index + 1)]}</Text>
+              <TouchableOpacity 
+                onPress={() => handleAddItem({ id: item.id + Math.random(0, 100), item: item["strIngredient" + (index + 1)]})}
+                className='bg-primary w-8 h-8 justify-center items-center rounded-lg'
+              >
+                <PlusIcon size={20} color={COLORS.white} />
+              </TouchableOpacity>
+              <Text className='text-primary font-PoppinsBold text-base w-1/2'>{item["strIngredient" + (index + 1)]}</Text>
             </View>
             <Text className='text-[#70B9BE] font-NunitoBold text-sm'>{item["strMeasure" + (index + 1)]}</Text>
           </View>
         ))
       }
+
     </View>
   )
 }

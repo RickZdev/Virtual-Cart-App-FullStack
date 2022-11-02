@@ -1,48 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, Image, ToastAndroid, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Image, ToastAndroid, StyleSheet, RefreshControl } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useSelector, useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { PlusIcon, MinusIcon  } from 'react-native-heroicons/outline'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 import { cartListAction,  } from '../redux/features/cartSlice'
 import COLORS from '../global/COLORS';
 
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cartListReducer.cartList)
   const cartTotal = useSelector((state) => state.cartListReducer.cartList.reduce((total, item) => 
     total += item.total, 0));
   const cartTotalItems = useSelector((state) => state.cartListReducer.cartList.reduce((total, item) => 
-  total += item.quantity, 0));
-
+    total += item.quantity, 0));
   const [refreshing, setRefreshing] = useState(false);
-
-  const getCart = async () => {
-    const value = await AsyncStorage.getItem('cart');
-    if (value !== null) {
-      setCart(JSON.parse(value));
-      setNumberOfItems(cart.length);
-
-      let subtotal = 0;
-      cart.map((item) => {
-        subtotal += item.amount 
-      })
-
-      setSubtotal(subtotal)
-    } else {
-      setCart([])
-    }
-  }
-
-  useEffect(() => {
-  }, [cart])
-
-  const handleRemoveCartStorage = async () => {
-    await AsyncStorage.removeItem('cart');
-    ToastAndroid.show('Remove Cart Successfully!', ToastAndroid.LONG);
-  }
 
   const handleRemoveItem = (item) => {
     dispatch(cartListAction.removeItemToCart(item.virtualCartUid))
@@ -50,7 +23,6 @@ const CartScreen = () => {
 
   const onRefresh = () => {
     ToastAndroid.show('Refreshing...', ToastAndroid.SHORT);
-    // getCart();
     setRefreshing(true)
     setTimeout(() => {
       setRefreshing(false)
@@ -69,32 +41,53 @@ const CartScreen = () => {
 
   return (
     <View className='flex-1 pt-10'>
-      <TouchableOpacity onPress={handleRemoveCartStorage}>
+      <TouchableOpacity>
         <Text className='font-PoppinsBold text-2xl text-primary pl-5'>Your Virtual Cart</Text>
       </TouchableOpacity>
-      <View className='px-5 pt-5 mb-8'>
-      <SwipeListView
-        data={cart}
-        keyExtractor={(_item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <Card data={item} />}
-        renderHiddenItem={(data) => hiddenItem(data)}
-        rightOpenValue={-75}
-        closeOnRowPress={true}
-      />
+      <View className='px-5 pt-5 mb-24'>
+        <SwipeListView
+          data={cart}
+          keyExtractor={(_item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          rightOpenValue={-75}
+          closeOnRowPress={true}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => onRefresh()}
+            />
+          }
+          renderHiddenItem={(data) => hiddenItem(data)}
+          renderItem={({ item }) => <Card data={item} />}
+        />
       </View>
-      <View className='absolute bottom-2 w-full '>
-        <View className='bg-[#70B9BE] mx-3 rounded-lg h-14 px-2 py-1'>
-          <Text className='text-white text-sm font-PoppinsBold'>{cartTotalItems} items</Text>
-          <Text className='text-white text-lg font-PoppinsBold'>Subtotal: ₱{cartTotal.toLocaleString('en-US')}</Text>
+      {
+        cartTotalItems !== 0 && 
+        <View className='absolute bottom-3 w-full'>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PaymentOptionScreen')}
+            activeOpacity={.6}
+            className='bg-[#70B9BE] mx-3 rounded-lg h-14 px-2 py-1 flex-row items-center justify-between' 
+            style={{ elevation: 3}}
+          >
+            <View className='flex-row items-center space-x-1'>
+              <View className='justify-center items-center bg-primary w-10 h-10 rounded-lg'>
+                <Text className='text-white text-base font-PoppinsBold'>{cartTotalItems}</Text>
+              </View>
+              <Text className='text-white text-base font-PoppinsBold'>{cartTotalItems > 1 ? 'Items' : 'Item'}</Text>
+            </View>
+            <Text className='text-white text-base font-PoppinsBold'>Total: ₱{cartTotal.toLocaleString('en-US')}</Text>
+          </TouchableOpacity>
         </View>
-      </View>
+      }
     </View>
   )
 }
 
 const Card = ({ data }) => {
   const dispatch = useDispatch();
+  const cartTotal = useSelector((state) => state.cartListReducer.cartList.reduce((total, item) => 
+  item.price * item.quantity, 0));
 
   const handleAddQuantity = () => {
     dispatch(cartListAction.addItemQuantity(data.virtualCartUid))
@@ -107,8 +100,8 @@ const Card = ({ data }) => {
   return (
     <View className='bg-[#ECF0F9] rounded-xl mb-3'>
       <View className='flex-row space-x-5 p-4'>
+        {/* quantity */}
         <View className='justify-center items-center space-y-3 w-20'>
-          {/* quantity */}
           <Text className='font-PoppinsMedium text-primary text-sm'>Qty</Text>
           <View className='items-center flex-row space-x-2'>
             <TouchableOpacity 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native'
 import CheckBox from '@react-native-community/checkbox';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,8 +17,12 @@ const GroceryListScreen = () => {
     setItem('');
   }
 
+  useEffect(() => {
+    console.log(groceryList)
+  }, [groceryList])
+
   return (
-    <View className='bg-white flex-1'>
+    <View className='bg-white flex-1 dark:bg-primary'>
       {/* header */}
       <View className=' py-4 px-6 space-y-5'>
         <Text className='text-3xl font-PoppinsBold text-primary text-center'>Grocery List</Text>
@@ -60,6 +64,8 @@ const Card = ({ data }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [item, setItem] = useState(data)
+
+  console.log(item)
 
   const handleEditItem = async (text) => {
     setItem(text)

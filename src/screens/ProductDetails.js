@@ -39,7 +39,7 @@ const ProductDetails = ({ route, navigation }) => {
     if(cart.some(item => item.virtualCartUid === data.virtualCartUid)) {
       ToastAndroid.show('Item already on the cart', ToastAndroid.SHORT);
     } else {
-      const total = quantity * amount;
+      const total = quantity * data.price;
       dispatch(cartListAction.addItemToCart({ ...data, quantity, total}))
       ToastAndroid.show('Added to cart successfully', ToastAndroid.LONG);
       handleCancel();
@@ -85,19 +85,17 @@ const ProductDetails = ({ route, navigation }) => {
   return (
     <View className='flex-1 bg-primary'>
       {/* details */}
-      <Text className='font-PoppinsBold text-2xl text-white text-center py-3'>Product Details</Text>
-      <View className='justify-center items-center'>
-        <View className='flex-1 justify-center items-center w-48 h-48 bg-white p-5 rounded-2xl'>
+      <Text className='flex-1 font-PoppinsBold text-2xl text-white text-center py-3 mt-4'>Product Details</Text>
+      <View className='flex-1 justify-center items-center'>
+        <View className='justify-center items-center w-44 h-44 bg-white p-5 rounded-2xl'>
           <Image
             source={rawImage}
             resizeMode='cover'
             className='w-full h-full'
           />
         </View>
-        <Text className='text-white font-PoppinsBold text-xl mt-4'>Price: ₱{data.price.toLocaleString('en-US')}.00</Text>
-        <Text className='text-white font-PoppinsRegular text-xl'>{data.productName}</Text>
-        <Text className='text-white font-PoppinsRegular text-xl'>{data.offer}</Text>
-        <Text className='text-white font-PoppinsRegular text-xl'>{data.size}</Text>
+        <Text className='text-white font-PoppinsRegular text-xl mt-4'>{data.productName} ({data.size})</Text>
+        <Text className='text-white font-PoppinsBold text-xl '>Price: ₱{data.price.toLocaleString('en-US')}.00</Text>
 
         {/* quantity */}
         <View className='flex-row space-x-4 bg-primary border-[1px] border-white px-7 py-2 rounded-3xl my-5'>
@@ -115,7 +113,7 @@ const ProductDetails = ({ route, navigation }) => {
       </View>
       
       {/* speech */}
-      <View className='justify-center items-center mt-3 space-y-2'>
+      <View className='flex-1 justify-center items-center mt-3 space-y-2'>
         <TouchableOpacity onPress={handleStartSpeech} className='bg-white border-[1px] w-14 h-14 border-white rounded-full justify-center items-center'>
           {
             !startSpeech ?

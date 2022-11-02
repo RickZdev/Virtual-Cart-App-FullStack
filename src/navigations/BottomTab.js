@@ -30,7 +30,6 @@ const BottomTab = ({ navigation }) => {
         tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.black,
         tabBarInactiveTintColor: COLORS.primary,
-        tabBarHideOnKeyboard: true,
         tabBarIconStyle: { size: 42 }
       }}
     >
@@ -51,9 +50,12 @@ const BottomTab = ({ navigation }) => {
               <Ionicons name='ios-cart' color={color} size={size} /> :
               <View>
                 <Ionicons name='ios-cart-outline' color={color} size={size} />
-                <View className='absolute -right-2 -top-2 bg-primary rounded-full w-5 h-5 justify-center items-center'>
-                  <Text className='text-xs text-white font-PoppinsRegular'>{cart.length}</Text>
-                </View>
+                {
+                  cart.length > 0 &&                  
+                    <View className='absolute -right-2 -top-2 bg-primary rounded-full w-5 h-5 justify-center items-center'>
+                      <Text className='text-xs text-white font-PoppinsRegular'>{cart.length}</Text>
+                    </View>
+                }
               </View>
           ),
         }}

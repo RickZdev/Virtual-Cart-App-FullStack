@@ -3,18 +3,12 @@ import { View, Platform, PermissionsAndroid, ToastAndroid, Text, TouchableOpacit
 import RNFS from "react-native-fs";
 import CameraRoll from "@react-native-community/cameraroll";
 import QRCode from 'react-native-qrcode-svg';
+import { useDispatch, useSelector } from 'react-redux';
 
-const QRGenerator = () => {
-  const initialItemState = {
-    virtualCartUid: Math.random(1, 200) + 'virtualProduct',
-    productName: 'Iced Coffee',
-    offer: 'Limited Offer',
-    size: '22oz',
-    image: 'fresh-milk',
-    price: 2000.00
-  }
+const CartQrScreen = ({ route, navigation }) => {
+  const cart = useSelector((state) => state.cartListReducer.cartList)
   
-  const [item, setItem] = useState(JSON.stringify(initialItemState));
+  const [item, setItem] = useState(JSON.stringify(cart));
   const [productQRref, setProductQRref] = useState();
 
   const saveQrToDisk = async () => {
@@ -50,20 +44,13 @@ const QRGenerator = () => {
     return status === 'granted';
   }
 
-  const handleGenerateQR = async () => {
-    setItem(JSON.stringify({
-      virtualCartUid: Math.random(1, 200) + 'virtualProduct',
-      productName: 'Iced Coffee',
-      offer: 'Limited Offer',
-      size: '22oz',
-      image: 'fresh-milk',
-      price: 2000.00
-    }))
-  }
-
   return (
-    <View className='flex-1 bg-white justify-center items-center'>
-      <Text className='-top-5 text-black text-lg font-bold'>QR Code</Text>
+    <View className='flex-1'>
+      <View className='mt-10 justify-center items-center'>
+        <Text className=' text-black text-4xl font-PoppinsBold'>QR CODE</Text>
+      </View>
+      <View className='flex-1 justify-center items-center'>
+        <Text className=' text-black text-base font-PoppinsMedium mb-5'>Here's your Cart QR Code</Text>
         <QRCode
           value={item}
           getRef={(ref) => setProductQRref(ref)}
@@ -71,18 +58,16 @@ const QRGenerator = () => {
           color="black"
           backgroundColor="white"
         />
-        <TouchableOpacity
-          onPress={handleGenerateQR}
-          className='items-center mb-8 bg-[#273746] rounded-3xl p-4 absolute bottom-16 w-[90%] justify-center'>
-          <Text className='text-white text-base capitalize'>Generate QR Code</Text>
-        </TouchableOpacity>
-      
-        <TouchableOpacity
-          onPress={saveQrToDisk}
-          className='items-center mb-8 bg-[#273746] rounded-3xl p-4 absolute bottom-0 w-[90%] justify-center'>
-          <Text className='text-white text-base capitalize'>Save to Gallery</Text>
-        </TouchableOpacity>
+      </View>
+
+      <View className='flex-1 justify-center items-center px-10'>
+        <Text className='text-base text-center text-black font-PoppinsMedium'>Present this QR Code to pay in the Cashier</Text>
+      </View>
+
+      <TouchableOpacity onPress={saveQrToDisk} className='p-4 bg-primary justify-center items-center mx-5 rounded-3xl mb-10'>
+        <Text className='text-white text-base capitalize'>Save to Gallery</Text>
+      </TouchableOpacity>
     </View>
   )
 }
-export default QRGenerator;
+export default CartQrScreen

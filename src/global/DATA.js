@@ -27,6 +27,30 @@ export default DATA = {
       id: 3,
       title: '91g fats',
       icon: <Ionicons name='pizza-outline' size={22} color={COLORS.black}/>
+    }
+  ],
+  paymentOptionList: [
+    {
+      id: 0,
+      paymentOption: 'Over-the-Counter (Cash)',
+      icon: <MaterialCommunityIcons name='cash-register' size={size} color={COLORS.black}/>
+    },
+    {
+      id: 1,
+      paymentOption: 'Card',
+      icon: <SimpleLineIcons name='credit-card' size={size} color={COLORS.black}/>
+    },
+  ],
+  modeOfPayment: [
+    {
+      id: 0,
+      mode: 'Pick-up',
+      icon: <MaterialCommunityIcons name='storefront-outline' size={size} color={COLORS.white}/>
+    },
+    {
+      id: 1,
+      mode: 'Delivery',
+      icon: <MaterialCommunityIcons name='truck-delivery-outline' size={size} color={COLORS.white}/>
     },
   ]
 }
